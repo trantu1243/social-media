@@ -1,3 +1,6 @@
+/* eslint-disable no-dupe-keys */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 // colors
 var blue = '#0d66ff';
 var blueLight = '#0e97b5';

@@ -1,5 +1,46 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+
+import React, { useState } from "react";
+
+import SERVER_URL from "../../../variables";
+
+interface LoginUser {
+    username: string;
+    password: string
+}
+
 function Login(){
+
+    const [inputText, setInputText] = useState<LoginUser>({
+        username: '',
+        password: '',
+    });
+    const [checkbox, setCheckbox] = useState<boolean>(false);
+
+    function handleChange(event:React.ChangeEvent<HTMLInputElement>): void{
+        const name = event.target.name;
+        const value = event.target.value;
+        setInputText((preValue)=> {return {...preValue, [name]: value}})
+    }
+
+    async function handleSubmit(event:React.MouseEvent<HTMLAnchorElement, MouseEvent>): Promise<any>{
+        event.preventDefault();
+        try {
+            const response = await fetch(`${SERVER_URL}/login`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Access-Control-Allow-Origin': `${SERVER_URL}`
+                },
+                body: JSON.stringify(inputText)
+            });
+            const res = await response.json();
+            console.log(res);
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
     
     return (
         <>
@@ -35,11 +76,14 @@ function Login(){
                         </h2>
                         <form>
                         <div className="form-group icon-input mb-3">
-                            <i className="font-sm ti-email text-grey-500 pe-0" />
+                            <i className="font-sm ti-user text-grey-500 pe-0" />
                             <input
                             type="text"
                             className="style2-input ps-5 form-control text-grey-900 font-xsss fw-600"
-                            placeholder="Your Email Address"
+                            placeholder="Your Username"
+                            name="username"
+                            value={inputText.username}
+                            onChange={handleChange}
                             />
                         </div>
                         <div className="form-group icon-input mb-1">
@@ -47,6 +91,9 @@ function Login(){
                             type="Password"
                             className="style2-input ps-5 form-control text-grey-900 font-xss ls-3"
                             placeholder="Password"
+                            name="password"
+                            value={inputText.password}
+                            onChange={handleChange}
                             />
                             <i className="font-sm ti-lock text-grey-500 pe-0" />
                         </div>
@@ -55,6 +102,8 @@ function Login(){
                             type="checkbox"
                             className="form-check-input mt-2"
                             id="exampleCheck5"
+                            checked={checkbox}
+                            onChange={()=>setCheckbox(preValue=>!preValue)}
                             />
                             <label
                             className="form-check-label font-xsss text-grey-500"
@@ -63,7 +112,8 @@ function Login(){
                             Remember me
                             </label>
                             <a
-                            href="forgot.html"
+                            href="#"
+                            onClick={(e)=>{e.preventDefault()}}
                             className="fw-600 font-xsss text-grey-700 mt-1 float-right"
                             >
                             Forgot your Password?
@@ -73,7 +123,7 @@ function Login(){
                         <div className="col-sm-12 p-0 text-left">
                         <div className="form-group mb-1">
                             <a
-                            href="#" onClick={(e)=>{e.preventDefault()}}
+                            href="#" onClick={handleSubmit}
                             className="form-control text-center style2-input text-white fw-600 bg-dark border-0 p-0 "
                             >
                             Login

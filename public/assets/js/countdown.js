@@ -1,3 +1,6 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable strict */
+/* eslint-disable no-undef */
 
 // AMD support (Thanks to @FagnerMartinsBrack)
 ;(function(factory) {

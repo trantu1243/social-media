@@ -1,3 +1,24 @@
+/* eslint-disable no-loop-func */
+/* eslint-disable no-fallthrough */
+/* eslint-disable default-case */
+/* eslint-disable no-self-assign */
+/* eslint-disable array-callback-return */
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-self-compare */
+/* eslint-disable new-parens */
+/* eslint-disable eqeqeq */
+/* eslint-disable getter-return */
+/* eslint-disable no-func-assign */
+/* eslint-disable no-cond-assign */
+/* eslint-disable no-mixed-operators */
+/* eslint-disable no-sequences */
+/* eslint-disable no-undef */
+/* eslint-disable strict */
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-unused-vars */
+
 /**
  * @license
  * Video.js 7.11.4 <http://videojs.com/>

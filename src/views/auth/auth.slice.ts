@@ -14,25 +14,33 @@ interface User {
     shareid: Number[];
 }
 
-const initialState: User = {
-    id: 0,
-    username: '',
-    name: '',
-    avatar: '',
-    background: '',
-    postid: [],
-    followerid: [],
-    followingid: [],
-    likeid: [],
-    commentid: [],
-    shareid: []
+interface Auth {
+    token: string;
+    user: User
+}
+
+const initialState: Auth = {
+    user: {
+        id: 0,
+        username: '',
+        name: '',
+        avatar: '',
+        background: '',
+        postid: [],
+        followerid: [],
+        followingid: [],
+        likeid: [],
+        commentid: [],
+        shareid: []
+    },
+    token: ''    
 }
 
 export const counterSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-     
+    
     },
 })
 

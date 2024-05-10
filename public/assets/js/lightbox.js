@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 /*!
  * Lightbox v2.11.2
  * by Lokesh Dhakar
