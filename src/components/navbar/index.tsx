@@ -41,26 +41,23 @@ function Navbar(){
                     href="default-storie.html"
                     className="p-2 text-center ms-0 menu-icon center-menu-icon"
                 >
-                    <i className="feather-zap font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 " />
+                    <i className="feather-lock font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 " />
                 </a>
+
                 <a
-                    href="default-video.html"
+                    href="default-storie.html"
                     className="p-2 text-center ms-0 menu-icon center-menu-icon"
                 >
-                    <i className="feather-video font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 " />
+                    <i className="feather-edit-3 font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 " />
                 </a>
+                
                 <a
-                    href="default-group.html"
+                    href="default-storie.html"
                     className="p-2 text-center ms-0 menu-icon center-menu-icon"
                 >
-                    <i className="feather-user font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 " />
+                    <i className="feather-heart font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 " />
                 </a>
-                <a
-                    href="shop-2.html"
-                    className="p-2 text-center ms-0 menu-icon center-menu-icon"
-                >
-                    <i className="feather-shopping-bag font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 " />
-                </a>
+
                 <a
                     href="#"
                     className="p-2 text-center ms-auto menu-icon"

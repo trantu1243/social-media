@@ -2,7 +2,9 @@
 
 import React, { useState } from "react";
 
+import { useAppDispatch } from "../../../hooks";
 import SERVER_URL from "../../../variables";
+import { login } from "../auth.slice";
 
 interface LoginUser {
     username: string;
@@ -16,6 +18,8 @@ function Login(){
         password: '',
     });
     const [checkbox, setCheckbox] = useState<boolean>(false);
+
+    const dispatch = useAppDispatch();
 
     function handleChange(event:React.ChangeEvent<HTMLInputElement>): void{
         const name = event.target.name;
@@ -35,7 +39,7 @@ function Login(){
                 body: JSON.stringify(inputText)
             });
             const res = await response.json();
-            console.log(res);
+            dispatch(login(res));
         }
         catch (e) {
             console.log(e);
