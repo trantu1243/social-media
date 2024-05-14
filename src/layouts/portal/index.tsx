@@ -1,52 +1,49 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar";
 import Leftbar from "../../components/leftbar";
-import Rightbar from "../../components/rightbar";
+import { useCallback, useEffect } from "react";
+import SERVER_URL from "../../variables";
+import { useAppDispatch } from "../../hooks";
+import { login, logout } from "../../views/auth/auth.slice";
 
 function PortalLayout(){
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const authorization = useCallback(async (token: string)=>{
+        try{
+            const response = await fetch(`${SERVER_URL}/auth`, {
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Access-Control-Allow-Origin': `${SERVER_URL}`,
+                  'Authorization': token
+                }
+            });
+            const res = await response.json();
+            dispatch(login({
+                token: token,
+                user: res
+            }));
+        }
+        catch (e){
+            console.log(e);
+            dispatch(logout());
+            navigate('/auth/login');
+        }
+    }, [dispatch, navigate]);
+    useEffect(()=>{
+        const token = localStorage.getItem('token') || null;
+        if (token) {
+            authorization(token);
+        } else{
+            navigate('/auth/login');
+        }
+    },[authorization, navigate]);
     return (
         <div className="main-wrapper">
             <Navbar />
-            <Leftbar />
-            <div className="main-content right-chat-active">
-                <div className="middle-sidebar-bottom">
-                    <div className="middle-sidebar-left">
-                        <div className="preloader-wrap p-3">
-                            <div className="box shimmer">
-                            <div className="lines">
-                                <div className="line s_shimmer" />
-                                <div className="line s_shimmer" />
-                                <div className="line s_shimmer" />
-                                <div className="line s_shimmer" />
-                            </div>
-                            </div>
-                            <div className="box shimmer mb-3">
-                            <div className="lines">
-                                <div className="line s_shimmer" />
-                                <div className="line s_shimmer" />
-                                <div className="line s_shimmer" />
-                                <div className="line s_shimmer" />
-                            </div>
-                            </div>
-                            <div className="box shimmer">
-                            <div className="lines">
-                                <div className="line s_shimmer" />
-                                <div className="line s_shimmer" />
-                                <div className="line s_shimmer" />
-                                <div className="line s_shimmer" />
-                            </div>
-                            </div>
-                        </div>
-      
-                        <div className="row feed-body">
-                            <Outlet />
-                            <Rightbar />
-                        </div>                  
-                    </div>
-                </div>
-            </div>
-          
+            <Leftbar />           
+            <Outlet />
         </div>
     ) 
 }

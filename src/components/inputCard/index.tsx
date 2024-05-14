@@ -1,8 +1,14 @@
+import { useLocation } from "react-router-dom";
+
 /* eslint-disable jsx-a11y/anchor-is-valid */
 function InputCard(){
+    const location = useLocation();
+    
     return (
         <>
-        <div className="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3">
+        <div className={location.pathname==="/portal/home" ? 
+            "card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3"
+            :"card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3 mt-3"}>
             <div className="card-body p-0">
             <a
                 href="#"

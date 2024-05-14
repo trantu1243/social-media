@@ -3,6 +3,9 @@
 import React, { useState } from "react";
 
 import SERVER_URL from "../../../variables";
+import { useAppDispatch } from "../../../hooks";
+import { useNavigate } from "react-router-dom";
+import { login } from "../auth.slice";
 
 interface NewUser {
     username: string;
@@ -17,6 +20,9 @@ function Register(){
         name: ''
     });
     const [checkbox, setCheckbox] = useState<boolean>(false);
+
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     function handleChange(event:React.ChangeEvent<HTMLInputElement>): void{
         const name = event.target.name;
@@ -36,7 +42,9 @@ function Register(){
                 body: JSON.stringify(inputText)
             });
             const res = await response.json();
-            console.log(res);
+            localStorage.setItem("token", res.token);
+            dispatch(login(res));
+            navigate('/portal/home');
         }
         catch (e) {
             console.log(e);

@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch } from "../../../hooks";
 import SERVER_URL from "../../../variables";
@@ -20,6 +21,7 @@ function Login(){
     const [checkbox, setCheckbox] = useState<boolean>(false);
 
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     function handleChange(event:React.ChangeEvent<HTMLInputElement>): void{
         const name = event.target.name;
@@ -39,7 +41,9 @@ function Login(){
                 body: JSON.stringify(inputText)
             });
             const res = await response.json();
+            localStorage.setItem("token", res.token);
             dispatch(login(res));
+            navigate('/portal/home');
         }
         catch (e) {
             console.log(e);

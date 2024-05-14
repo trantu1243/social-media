@@ -6,6 +6,7 @@ import Register from "./views/auth/register";
 
 import PortalLayout from "./layouts/portal";
 import Home from "./views/portal/home";
+import UserPage from "./views/portal/userPage";
 
 const routes = [
     {
@@ -37,6 +38,10 @@ const routes = [
         {
           path: "home",
           element: <Home />
+        },
+        {
+          path: "user",
+          element: <UserPage />
         },
         {
           path: "/portal",

@@ -1,4 +1,9 @@
+import { useAppDispatch } from "../../hooks";
+import { logout } from "../../views/auth/auth.slice";
+
+/* eslint-disable jsx-a11y/anchor-is-valid */
 function Leftbar(){
+    const dispatch = useAppDispatch();
     return (
         <>
             <nav className="navigation scroll-bar">
@@ -61,9 +66,11 @@ function Leftbar(){
                             </li>
 
                             <li>
-                                <a href="user-page.html" className="nav-content-bttn open-font">
-                                <i className="feather-log-out btn-round-md bg-red-gradiant me-3" />
-                                <span>Logout</span>
+                                <a href="/auth/login" className="nav-content-bttn open-font" 
+                                    onClick={()=>{dispatch(logout());}}
+                                >
+                                    <i className="feather-log-out btn-round-md bg-red-gradiant me-3" />
+                                    <span>Logout</span>
                                 </a>
                             </li>
                             
