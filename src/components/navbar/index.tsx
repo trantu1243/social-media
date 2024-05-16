@@ -1,10 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { useAppSelector } from "../../hooks";
+
 function Navbar(){
+    const user = useAppSelector((state) => state.auth).data.user;
     return (
         <>
         <div className="nav-header bg-white shadow-xs border-0">
                 <div className="nav-top">
-                    <a href="index.html">
+                    <a href="/portal/home">
                     <i className="feather-zap text-success display1-size me-2 ms-0" />
                     <span className="d-inline-block fredoka-font ls-3 fw-600 text-current font-xxl logo-text mb-0">
                         Sociala.{" "}
@@ -32,7 +35,7 @@ function Navbar(){
                     </div>
                 </form>
                 <a
-                    href="default.html"
+                    href="/portal/home"
                     className="p-2 text-center ms-3 menu-icon center-menu-icon"
                 >
                     <i className="feather-home font-lg alert-primary btn-round-lg theme-dark-bg text-current " />
@@ -148,8 +151,8 @@ function Navbar(){
                 <div className="p-2 text-center ms-3 position-relative dropdown-menu-icon menu-icon cursor-pointer">
                     <i className="feather-settings animation-spin d-inline-block font-xl text-current" />
                 </div>
-                <a href="default-settings.html" className="p-0 ms-3 menu-icon">
-                    <img src="/assets/images/profile-4.png" alt="user" className="w40 mt--1" />
+                <a href={`/portal/user/${user.id}`} className="p-0 ms-3 menu-icon">
+                    <img src={user.avatar} alt="user" className="w40 mt--1" />
                 </a>
                 </div>
         </>

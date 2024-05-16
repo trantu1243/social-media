@@ -1,9 +1,10 @@
 import { useLocation } from "react-router-dom";
+import { useAppSelector } from "../../hooks";
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
 function InputCard(){
     const location = useLocation();
-    
+    const user = useAppSelector((state) => state.auth).data.user;
     return (
         <>
         <div className={location.pathname==="/portal/home" ? 
@@ -21,7 +22,7 @@ function InputCard(){
             <div className="card-body p-0 mt-3 position-relative">
             <figure className="avatar position-absolute ms-2 mt-1 top-5">
                 <img
-                src="/assets/images/user-8.png"
+                src={user.avatar}
                 alt=""
                 className="shadow-sm rounded-circle w30"
                 />

@@ -1,19 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-interface User {
+export interface User {
     id: Number;
-    username: string;
     name: string;
+    about: string;
     avatar: string;
     background: string;
     postid: Number[];
     followerid: Number[];
     followingid: Number[];
-    likeid: Number[];
-    commentid: Number[];
-    shareid: Number[];
-    notifications: Number[];
-    check_notification: boolean
 }
 
 interface Auth {
@@ -30,18 +25,13 @@ const initialState: Auth = {
     data: {
         user: {
             id: 0,
-            username: '',
             name: '',
+            about: '',
             avatar: '',
             background: '',
             postid: [],
             followerid: [],
-            followingid: [],
-            likeid: [],
-            commentid: [],
-            shareid: [],
-            notifications: [],
-            check_notification: false
+            followingid: []
         },
         token: ''
     }

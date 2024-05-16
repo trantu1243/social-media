@@ -1,8 +1,9 @@
-import { useAppDispatch } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { logout } from "../../views/auth/auth.slice";
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
 function Leftbar(){
+    const id_user = useAppSelector((state) => state.auth).data.user.id;
     const dispatch = useAppDispatch();
     return (
         <>
@@ -16,7 +17,7 @@ function Leftbar(){
                         <ul className="mb-1 top-content">
                             <li className="logo d-none d-xl-block d-lg-block" />
                             <li>
-                                <a href="default.html" className="nav-content-bttn open-font">
+                                <a href="/portal/home" className="nav-content-bttn open-font">
                                 <i className="feather-tv btn-round-md bg-blue-gradiant me-3" />
                                 <span>Newsfeed</span>
                                 </a>
@@ -36,7 +37,7 @@ function Leftbar(){
                             </li>
                       
                             <li>
-                                <a href="user-page.html" className="nav-content-bttn open-font">
+                                <a href={`/portal/user/${id_user}`} className="nav-content-bttn open-font">
                                 <i className="feather-user btn-round-md bg-primary me-3" />
                                 <span>Author Profile </span>
                                 </a>

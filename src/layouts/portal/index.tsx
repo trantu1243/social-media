@@ -19,11 +19,17 @@ function PortalLayout(){
                   'Authorization': token
                 }
             });
-            const res = await response.json();
-            dispatch(login({
-                token: token,
-                user: res
-            }));
+            if (response.ok){
+                const res = await response.json();
+                dispatch(login({
+                    token: token,
+                    user: res
+                }));
+            } else {
+                dispatch(logout());
+                navigate('/auth/login');
+            }
+            
         }
         catch (e){
             console.log(e);

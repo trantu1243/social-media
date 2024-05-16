@@ -4,22 +4,40 @@ function PostCard(){
         <>
         <div className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-0">
             <div className="card-body p-0 d-flex">
-            <figure className="avatar me-3">
-                <img
-                src="/assets/images/user-8.png"
-                alt=""
-                className="shadow-sm rounded-circle w45"
-                />
-            </figure>
-            <h4 className="fw-700 text-grey-900 font-xssss mt-1">
-                Anthony Daugloi{" "}
-                <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
-                2 hour ago
-                </span>
-            </h4>
-            <a href="#" className="ms-auto">
-                <i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss" />
-            </a>
+                <figure className="avatar me-3">
+                    <img
+                    src="/assets/images/user-8.png"
+                    alt=""
+                    className="shadow-sm rounded-circle w45"
+                    />
+                </figure>
+                <h4 className="fw-700 text-grey-900 font-xssss mt-1">
+                    Anthony Daugloi{" "}
+                    <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
+                    2 hour ago
+                    </span>
+                </h4>
+                <a href="#" className="ms-auto">
+                    <i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss" />
+                </a>
+                <div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg show" aria-labelledby="dropdownMenu2" style={{margin: '0px', position: 'absolute', inset: '0px auto auto 0px', transform: 'translate(349.143px, 86.8571px)'}} data-popper-placement="bottom-end">
+                    <div className="card-body p-0 d-flex">
+                    <i className="feather-bookmark text-grey-500 me-3 font-lg" />
+                    <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Save Link <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Add this to your saved items</span></h4>
+                    </div>
+                    <div className="card-body p-0 d-flex mt-2">
+                    <i className="feather-alert-circle text-grey-500 me-3 font-lg" />
+                    <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide Post <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                    </div>
+                    <div className="card-body p-0 d-flex mt-2">
+                    <i className="feather-alert-octagon text-grey-500 me-3 font-lg" />
+                    <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Hide all from Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                    </div>
+                    <div className="card-body p-0 d-flex mt-2">
+                    <i className="feather-lock text-grey-500 me-3 font-lg" />
+                    <h4 className="fw-600 mb-0 text-grey-900 font-xssss mt-0 me-4">Unfollow Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
+                    </div>
+                </div>
             </div>
             <div className="card-body p-0 me-lg-5">
             <p className="fw-500 text-grey-500 lh-26 font-xssss w-100">
@@ -95,7 +113,6 @@ function PostCard(){
                 href="#"
                 className="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2"
             >
-                <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss" />{" "}
                 <i className="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss" />
                 2.8K Like
             </a>

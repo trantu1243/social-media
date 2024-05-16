@@ -7,11 +7,13 @@ import Register from "./views/auth/register";
 import PortalLayout from "./layouts/portal";
 import Home from "./views/portal/home";
 import UserPage from "./views/portal/userPage";
+import ErrorPage from "./error-page";
 
 const routes = [
     {
       path: "/",
       element: <Navigate to="/portal/home" replace/>,
+      errorElement: <ErrorPage />
     },
     {
         path: "/auth",
@@ -40,8 +42,9 @@ const routes = [
           element: <Home />
         },
         {
-          path: "user",
-          element: <UserPage />
+          path: "user/:id",
+          element: <UserPage />,
+          errorElement: <ErrorPage />
         },
         {
           path: "/portal",
