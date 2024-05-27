@@ -1,26 +1,94 @@
+import { useCallback, useEffect, useState } from "react";
+import { Params } from "react-router-dom";
+import SERVER_URL from "../../variables";
+import { useAppSelector } from "../../hooks";
+
 /* eslint-disable jsx-a11y/anchor-is-valid */
-function PostCard(){
+interface PostCardProps {
+    post_id: Readonly<Params<string>>;
+}
+
+interface Post {
+    id: Number;
+    userid: Number;
+    name: string;
+    avatar_user: string;
+    content: string;
+    image: string[];
+    interact_date: string;
+    post_date: string;
+    likeid: Number[];
+    commentid: Number[];
+    shareid: Number[];
+    secret: boolean;
+}
+  
+const PostCard: React.FC<PostCardProps> = ({ post_id }) =>{
+    const [post, setPost] = useState<Post>({
+        id: 0,
+        userid: 0,
+        name: "",
+        avatar_user: "",
+        content: "",
+        image: [],
+        interact_date: "",
+        post_date: "",
+        likeid: [],
+        commentid: [],
+        shareid: [],
+        secret: false
+    });
+    const token = useAppSelector((state) => state.auth).data.token;
+    const [checkPopup, setCheckPopup] = useState<Boolean>(false);
+    const getPost  = useCallback(async()=>{
+        try {
+            const response = await fetch(`${SERVER_URL}/post/${post_id.id}`,{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': `${SERVER_URL}`,
+                    'Authorization': token,
+                }
+            });
+            if (response.ok){
+                const res = await response.json();
+                console.log(res);
+                setPost(res);
+            }
+        }
+        catch(e) {
+            console.log(e);
+        }
+    },[post_id, token]);
+    useEffect(()=>{
+        getPost();
+    },[getPost]);
+
+    function handlePopup(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>){
+        event.preventDefault();
+        setCheckPopup(preValue=>!preValue);
+    }
+
     return (
         <>
         <div className="card w-100 shadow-xss rounded-xxl border-0 p-4 mb-0">
             <div className="card-body p-0 d-flex">
                 <figure className="avatar me-3">
                     <img
-                    src="/assets/images/user-8.png"
+                    src={post.avatar_user}
                     alt=""
                     className="shadow-sm rounded-circle w45"
                     />
                 </figure>
                 <h4 className="fw-700 text-grey-900 font-xssss mt-1">
-                    Anthony Daugloi{" "}
+                    {post.name}{" "}
                     <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
                     2 hour ago
                     </span>
                 </h4>
-                <a href="#" className="ms-auto">
+                <a href="#" className="ms-auto" onClick={handlePopup}>
                     <i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss" />
                 </a>
-                <div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg show" aria-labelledby="dropdownMenu2" style={{margin: '0px', position: 'absolute', inset: '0px auto auto 0px', transform: 'translate(349.143px, 86.8571px)'}} data-popper-placement="bottom-end">
+                {checkPopup && <div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg show" aria-labelledby="dropdownMenu2" style={{margin: '0px', position: 'absolute', inset: '0px auto auto 0px', transform: 'translate(349.143px, 86.8571px)'}} data-popper-placement="bottom-end">
                     <div className="card-body p-0 d-flex">
                     <i className="feather-bookmark text-grey-500 me-3 font-lg" />
                     <h4 className="fw-600 text-grey-900 font-xssss mt-0 me-4">Save Link <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Add this to your saved items</span></h4>
@@ -37,84 +105,32 @@ function PostCard(){
                     <i className="feather-lock text-grey-500 me-3 font-lg" />
                     <h4 className="fw-600 mb-0 text-grey-900 font-xssss mt-0 me-4">Unfollow Group <span className="d-block font-xsssss fw-500 mt-1 lh-3 text-grey-500">Save to your saved items</span></h4>
                     </div>
-                </div>
+                </div>}
             </div>
             <div className="card-body p-0 me-lg-5">
             <p className="fw-500 text-grey-500 lh-26 font-xssss w-100">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Morbi nulla dolor, ornare at commodo non, feugiat non nisi.
-                Phasellus faucibus mollis pharetra. Proin blandit ac massa
-                sed rhoncus{" "}
+                {post.content}{" "}
                 <a href="#" className="fw-600 text-primary ms-2">
                 See more
                 </a>
             </p>
             </div>
-            <div className="card-body d-block p-0 mb-3">
-            <div className="row ps-2 pe-2">
-                <div className="col-xs-6 col-sm-6 p-1">
-                <a href="/assets/images/t-36.jpg" data-lightbox="roadtri">
-                    <img
-                    src="/assets/images/t-21.jpg"
-                    className="rounded-3 w-100"
-                    alt=""
-                    />
-                </a>
+            {post.image.length > 0 && <div className="card-body d-block p-0 mb-3">
+                <div className="row ps-2 pe-2">
+                    <div className="col-sm-12 p-1">
+                        <a href="images/t-30.jpg" data-lightbox="roadtr">
+                            <img src={post.image[0]} className="rounded-3 w-100" alt="" />
+                        </a>
+                    </div>
                 </div>
-                <div className="col-xs-6 col-sm-6 p-1">
-                <a href="/assets/images/t-32.jpg" data-lightbox="roadtri">
-                    <img
-                    src="/assets/images/t-22.jpg"
-                    className="rounded-3 w-100"
-                    alt=""
-                    />
-                </a>
-                </div>
-            </div>
-            <div className="row ps-2 pe-2">
-                <div className="col-xs-4 col-sm-4 p-1">
-                <a href="/assets/images/t-33.jpg" data-lightbox="roadtri">
-                    <img
-                    src="/assets/images/t-23.jpg"
-                    className="rounded-3 w-100"
-                    alt=""
-                    />
-                </a>
-                </div>
-                <div className="col-xs-4 col-sm-4 p-1">
-                <a href="/assets/images/t-34.jpg" data-lightbox="roadtri">
-                    <img
-                    src="/assets/images/t-24.jpg"
-                    className="rounded-3 w-100"
-                    alt=""
-                    />
-                </a>
-                </div>
-                <div className="col-xs-4 col-sm-4 p-1">
-                <a
-                    href="/assets/images/t-35.jpg"
-                    data-lightbox="roadtri"
-                    className="position-relative d-block"
-                >
-                    <img
-                    src="/assets/images/t-25.jpg"
-                    className="rounded-3 w-100"
-                    alt=""
-                    />
-                    <span className="img-count font-sm text-white ls-3 fw-600">
-                    <b>+2</b>
-                    </span>
-                </a>
-                </div>
-            </div>
-            </div>
+            </div>}
             <div className="card-body d-flex p-0">
             <a
                 href="#"
                 className="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2"
             >
                 <i className="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss" />
-                2.8K Like
+                {post.likeid.length} Like
             </a>
             <div className="emoji-wrap">
                 <ul className="emojis list-inline mb-0">
@@ -149,7 +165,7 @@ function PostCard(){
                 className="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"
             >
                 <i className="feather-message-circle text-dark text-grey-900 btn-round-sm font-lg" />
-                <span className="d-none-xss">22 Comment</span>
+                <span className="d-none-xss">{post.commentid.length} Comment</span>
             </a>
             <a
                 href="#"

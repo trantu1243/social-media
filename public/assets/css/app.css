@@ -10,3 +10,29 @@
   label:hover{
     cursor: pointer;
   }
+
+  .loadImage{
+    position: relative;
+    width: 100%;
+}
+
+.loadImage > img{
+    width: 100%;
+}
+
+.cancelIcon:hover{
+    cursor: pointer;
+}
+
+.loadImage  svg{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.error-message{
+  width: 100%;
+  margin-top: .1rem;
+  font-size: .8em;
+  color: #e50202;
+}

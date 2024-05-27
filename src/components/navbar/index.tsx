@@ -151,8 +151,8 @@ function Navbar(){
                 <div className="p-2 text-center ms-3 position-relative dropdown-menu-icon menu-icon cursor-pointer">
                     <i className="feather-settings animation-spin d-inline-block font-xl text-current" />
                 </div>
-                <a href={`/portal/user/${user.id}`} className="p-0 ms-3 menu-icon">
-                    <img src={user.avatar} alt="user" className="w40 mt--1" />
+                <a href={`/portal/user/${user.id}`} className="p-0 ms-3 menu-icon" >
+                    <img src={user.avatar} alt="user" className="w40 mt--1" style={{borderRadius: "50%"}}/>
                 </a>
                 </div>
         </>

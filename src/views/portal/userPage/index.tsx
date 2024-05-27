@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+
 import { ErrorResponse, useParams } from "react-router-dom"
 import InputCard from "../../../components/inputCard"
 import PostCard from "../../../components/postCard"
@@ -6,7 +8,6 @@ import SERVER_URL from "../../../variables";
 import { User } from "../../auth/auth.slice";
 import { useAppSelector } from "../../../hooks";
 
-/* eslint-disable jsx-a11y/anchor-is-valid */
 function UserPage(){
     const [user, setUser] = useState<User>();
     const id = useParams().id;
@@ -17,8 +18,9 @@ function UserPage(){
         try{
             const response = await fetch(`${SERVER_URL}/user/${id}`, {
                 headers: {
-                  'Content-Type': 'application/json',
-                  'Access-Control-Allow-Origin': `${SERVER_URL}`
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': `${SERVER_URL}`,
+                    'Authorization': token         
                 }
             });
             if (response.ok){
@@ -36,7 +38,7 @@ function UserPage(){
               };
               throw errorResponse;
         }
-    },[id]);
+    },[id, token]);
     useEffect(()=>{
         getUserInfo();
     },[getUserInfo]);
@@ -68,8 +70,7 @@ function UserPage(){
                     setCheckPopup(false)
                     getUserInfo();
                 }
-            }
-            
+            }    
         }
         catch(e) {
             console.log(e);
@@ -96,6 +97,7 @@ function UserPage(){
                                 src={user?.avatar}
                                 alt=""
                                 className="float-right p-1 bg-white rounded-circle w-100"
+                                style={{width:'100px', height:'100px', objectFit:'cover'}}
                                 />
                             </figure>
                             <h4 className="fw-700 font-sm mt-2 mb-lg-5 mb-4 pl-15">
@@ -330,7 +332,7 @@ function UserPage(){
                         </div>
                         <div className="col-xl-8 col-xxl-9 col-lg-8">
                             {id === String(id_user) && <InputCard />}
-                            <PostCard />
+                            {/* <PostCard /> */}
                         </div>
                     </div>
                     </div>

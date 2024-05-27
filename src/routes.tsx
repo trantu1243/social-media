@@ -8,6 +8,7 @@ import PortalLayout from "./layouts/portal";
 import Home from "./views/portal/home";
 import UserPage from "./views/portal/userPage";
 import ErrorPage from "./error-page";
+import PostPage from "./views/portal/postPage";
 
 const routes = [
     {
@@ -44,7 +45,10 @@ const routes = [
         {
           path: "user/:id",
           element: <UserPage />,
-          errorElement: <ErrorPage />
+        },
+        {
+          path: "post/:id",
+          element: <PostPage />,
         },
         {
           path: "/portal",

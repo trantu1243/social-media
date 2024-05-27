@@ -215,7 +215,7 @@ function Home(){
                         </div>
 
                         <InputCard />
-                        <PostCard />
+                        {/* <PostCard /> */}
 
                         <div className="card w-100 text-center shadow-xss rounded-xxl border-0 p-4 mb-3 mt-3">
                             <div
