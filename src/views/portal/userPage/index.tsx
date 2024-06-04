@@ -332,6 +332,9 @@ function UserPage(){
                         </div>
                         <div className="col-xl-8 col-xxl-9 col-lg-8">
                             {id === String(id_user) && <InputCard />}
+                            {user?.postid.map((item, index)=>{
+                                return <PostCard post_id={String(item)}/>
+                            })}
                             {/* <PostCard /> */}
                         </div>
                     </div>

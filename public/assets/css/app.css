@@ -36,3 +36,7 @@
   font-size: .8em;
   color: #e50202;
 }
+
+.pointer-class:hover{
+  cursor: pointer;
+}

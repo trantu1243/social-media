@@ -1,19 +1,72 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-function RightComment(){
+
+import { useCallback, useEffect, useState } from "react";
+import { Post, PostCardProps } from "../postCard";
+import SERVER_URL from "../../variables";
+import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../hooks";
+
+
+const RightComment: React.FC<PostCardProps> = ({ post_id }) =>{
+    const [post, setPost] = useState<Post>({
+        id: 0,
+        userid: 0,
+        name: "",
+        avatar_user: "",
+        content: "",
+        image: [],
+        interact_date: "",
+        post_date: "",
+        likeid: [],
+        commentid: [],
+        shareid: [],
+        secret: false
+    });
+    const token = useAppSelector((state) => state.auth).data.token;
+    const navigate = useNavigate();
+
+    const getPost  = useCallback(async()=>{
+        try {
+            const response = await fetch(`${SERVER_URL}/post/${post_id}`,{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': `${SERVER_URL}`,
+                    'Authorization': token,
+                }
+            });
+            if (response.ok){
+                const res = await response.json();
+                console.log(res);
+                setPost(res);
+            }
+        }
+        catch(e) {
+            console.log(e);
+        }
+    },[post_id, token]);
+    useEffect(()=>{
+        getPost();
+    },[getPost]);
+
+    function navigateUserPage(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>){
+        event.stopPropagation();
+        event.preventDefault();
+        navigate(`/portal/user/${post.userid}`);
+    }
     return (
         <>
         <div className="right-comment chat-left scroll-bar theme-dark-bg">
             <div className="card-body ps-2 pe-4 pb-0 d-flex">
                 {" "}
-                <figure className="avatar me-3">
+                <figure className="avatar me-3" onClick={navigateUserPage}>
                 <img
-                    src="/assets/images/user-8.png"
+                    src={post.avatar_user}
                     alt=""
                     className="shadow-sm rounded-circle w45"
                 />
                 </figure>
-                <h4 className="fw-700 text-grey-900 font-xssss mt-1 text-left">
-                Hurin Seary{" "}
+                <h4 className="fw-700 text-grey-900 font-xssss mt-1 text-left" onClick={()=>{navigate(`/portal/user/${post.userid}`)}}>
+                {post.name}{" "}
                 <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
                     2 hour ago
                 </span>
@@ -30,14 +83,14 @@ function RightComment(){
                 >
                 <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss" />{" "}
                 <i className="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss" />
-                2.8K Like
+                {post.likeid.length} Like
                 </a>{" "}
                 <a
                 href="#"
                 className="d-flex align-items-center fw-600 text-grey-900 lh-26 font-xssss text-dark"
                 >
                 <i className="feather-message-circle text-grey-900 btn-round-sm font-lg text-dark" />
-                22 Comment
+                {post.commentid.length} Comment
                 </a>
             </div>
             <div className="card w-100 border-0 shadow-none right-scroll-bar">
