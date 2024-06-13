@@ -3,31 +3,31 @@
 import { useCallback, useEffect, useState } from "react";
 import { Post, PostCardProps } from "../postCard";
 import SERVER_URL from "../../variables";
-import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks";
+import CommentCard from "../commentCard";
 
+export interface Comment {
+    id: Number;
+    postid: Number;
+    userid: Number;
+    name: string;
+    avatar_user: string;
+    content: string;
+    likeid: string[];
+    commentid: string[];
+    comment_date: string
+}
 
 const RightComment: React.FC<PostCardProps> = ({ post_id }) =>{
-    const [post, setPost] = useState<Post>({
-        id: 0,
-        userid: 0,
-        name: "",
-        avatar_user: "",
-        content: "",
-        image: [],
-        interact_date: "",
-        post_date: "",
-        likeid: [],
-        commentid: [],
-        shareid: [],
-        secret: false
-    });
+    const [commentList, setCommentList] = useState<Comment[]>([]);
+    const user = useAppSelector((state)=>state.auth).data.user;
     const token = useAppSelector((state) => state.auth).data.token;
-    const navigate = useNavigate();
+    const [yourPost, setYourPost] = useState<string>("");
+    const [checkErrorInput, setCheckErrorInput] = useState<boolean>(false);
 
     const getPost  = useCallback(async()=>{
         try {
-            const response = await fetch(`${SERVER_URL}/post/${post_id}`,{
+            const response = await fetch(`${SERVER_URL}/comment/${post_id}`,{
                 headers: {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': `${SERVER_URL}`,
@@ -37,7 +37,7 @@ const RightComment: React.FC<PostCardProps> = ({ post_id }) =>{
             if (response.ok){
                 const res = await response.json();
                 console.log(res);
-                setPost(res);
+                setCommentList(res);
             }
         }
         catch(e) {
@@ -48,225 +48,73 @@ const RightComment: React.FC<PostCardProps> = ({ post_id }) =>{
         getPost();
     },[getPost]);
 
-    function navigateUserPage(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>){
-        event.stopPropagation();
+    async function handleSubmit(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>): Promise<any>{
         event.preventDefault();
-        navigate(`/portal/user/${post.userid}`);
+        if (yourPost)
+            try {
+         
+                const response = await fetch(`${SERVER_URL}/upload/comment`, {
+                    method: "POST",
+                    headers:{
+                        'Access-Control-Allow-Origin': `${SERVER_URL}`,
+                        'Authorization': token,
+                    },
+                    body: JSON.stringify({content: yourPost, postid: Number(post_id)})
+                });
+                if (response.ok){
+                    const res = await response.json();
+                    console.log(res);
+                    getPost();
+                }
+            }
+            catch (e){
+                console.log(e);
+            }
+        else setCheckErrorInput(true);
     }
     return (
         <>
         <div className="right-comment chat-left scroll-bar theme-dark-bg">
-            <div className="card-body ps-2 pe-4 pb-0 d-flex">
-                {" "}
-                <figure className="avatar me-3" onClick={navigateUserPage}>
-                <img
-                    src={post.avatar_user}
+        <div className="card w-100 shadow-xss rounded-xxl border-0 ps-4 pt-4 pe-4 pb-3 mb-3">
+            <div className="card-body p-0 mt-3 position-relative">
+                <figure className="avatar position-absolute ms-2 mt-1 top-5">
+                    <img
+                    src={user.avatar}
                     alt=""
-                    className="shadow-sm rounded-circle w45"
+                    className="shadow-sm rounded-circle w30"
+                    />
+                </figure>
+                <textarea
+                    name="yourPost"
+                    value={yourPost}
+                    onChange={(e)=> setYourPost(e.target.value)}
+                    className="h75 bor-0 w-100 rounded-xxl p-2 ps-5 font-xssss text-grey-500 fw-500 border-light-md theme-dark-bg"
+                    cols={30}
+                    rows={10}
+                    placeholder="Write your comment"
                 />
-                </figure>
-                <h4 className="fw-700 text-grey-900 font-xssss mt-1 text-left" onClick={()=>{navigate(`/portal/user/${post.userid}`)}}>
-                {post.name}{" "}
-                <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
-                    2 hour ago
-                </span>
-                </h4>{" "}
-                <a href="#" className="ms-auto">
-                <i className="ti-more-alt text-grey-900 btn-round-md bg-greylight font-xss" />
-                </a>
+                {checkErrorInput && <div className="error-message">
+                    Please enter your comment.
+                </div>}
             </div>
-            <div className="card-body d-flex ps-2 pe-4 pt-0 mt-0">
-                {" "}
-                <a
+            
+            <div className="card-body d-flex p-0 mt-0">        
+          
+            <a
                 href="#"
-                className="d-flex align-items-center fw-600 text-grey-900 lh-26 font-xssss me-3 text-dark"
-                >
-                <i className="feather-thumbs-up text-white bg-primary-gradiant me-1 btn-round-xs font-xss" />{" "}
-                <i className="feather-heart text-white bg-red-gradiant me-2 btn-round-xs font-xss" />
-                {post.likeid.length} Like
-                </a>{" "}
-                <a
-                href="#"
-                className="d-flex align-items-center fw-600 text-grey-900 lh-26 font-xssss text-dark"
-                >
-                <i className="feather-message-circle text-grey-900 btn-round-sm font-lg text-dark" />
-                {post.commentid.length} Comment
-                </a>
+                className="py-2 px-0 lh-20 w75 bg-primary me-2 text-white text-center font-xssss fw-600 ls-1 rounded-xl ms-auto"
+                onClick={handleSubmit}
+            >
+                Comment
+            </a>
+         
             </div>
+        </div>
             <div className="card w-100 border-0 shadow-none right-scroll-bar">
-                <div className="card-body border-top-xs pt-4 pb-3 pe-4 d-block ps-5">
-                {" "}
-                <figure className="avatar position-absolute left-0 ms-2 mt-1">
-                    <img
-                    src="/assets/images/user-6.png"
-                    alt=""
-                    className="shadow-sm rounded-circle w35"
-                    />
-                </figure>
-                <div className="chat p-3 bg-greylight rounded-xxl d-block text-left theme-dark-bg">
-                    <h4 className="fw-700 text-grey-900 font-xssss mt-0 mb-1">
-                    Victor Exrixon{" "}
-                    <a href="#" className="ms-auto">
-                        <i className="ti-more-alt float-right text-grey-800 font-xsss" />
-                    </a>
-                    </h4>
-                    <p className="fw-500 text-grey-500 lh-20 font-xssss w-100 mt-2 mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla
-                    dolor.
-                    </p>
-                </div>
-                </div>
-                <div className="card-body pt-0 pb-3 pe-4 d-block ps-5">
-                {" "}
-                <figure className="avatar position-absolute left-0 ms-2 mt-1">
-                    <img
-                    src="/assets/images/user-4.png"
-                    alt=""
-                    className="shadow-sm rounded-circle w35"
-                    />
-                </figure>
-                <div className="chat p-3 bg-greylight rounded-xxl d-block text-left theme-dark-bg">
-                    <h4 className="fw-700 text-grey-900 font-xssss mt-0 mb-1">
-                    Surfiya Zakir{" "}
-                    <a href="#" className="ms-auto">
-                        <i className="ti-more-alt float-right text-grey-800 font-xsss" />
-                    </a>
-                    </h4>
-                    <p className="fw-500 text-grey-500 lh-20 font-xssss w-100 mt-2 mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla
-                    dolor.
-                    </p>
-                </div>
-                </div>
-                <div className="card-body pt-0 pb-3 pe-4 d-block ps-5 ms-5 position-relative">
-                {" "}
-                <figure className="avatar position-absolute left-0 ms-2 mt-1">
-                    <img
-                    src="/assets/images/user-3.png"
-                    alt=""
-                    className="shadow-sm rounded-circle w35"
-                    />
-                </figure>
-                <div className="chat p-3 bg-greylight rounded-xxl d-block text-left theme-dark-bg">
-                    <h4 className="fw-700 text-grey-900 font-xssss mt-0 mb-1">
-                    Goria Coast{" "}
-                    <a href="#" className="ms-auto">
-                        <i className="ti-more-alt float-right text-grey-800 font-xsss" />
-                    </a>
-                    </h4>
-                    <p className="fw-500 text-grey-500 lh-20 font-xssss w-100 mt-2 mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </p>
-                </div>
-                </div>
-                <div className="card-body pt-0 pb-3 pe-4 d-block ps-5 ms-5 position-relative">
-                {" "}
-                <figure className="avatar position-absolute left-0 ms-2 mt-1">
-                    <img
-                    src="/assets/images/user-3.png"
-                    alt=""
-                    className="shadow-sm rounded-circle w35"
-                    />
-                </figure>
-                <div className="chat p-3 bg-greylight rounded-xxl d-block text-left theme-dark-bg">
-                    <h4 className="fw-700 text-grey-900 font-xssss mt-0 mb-1">
-                    Hurin Seary{" "}
-                    <a href="#" className="ms-auto">
-                        <i className="ti-more-alt float-right text-grey-800 font-xsss" />
-                    </a>
-                    </h4>
-                    <p className="fw-500 text-grey-500 lh-20 font-xssss w-100 mt-2 mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </p>
-                </div>
-                </div>
-                <div className="card-body pt-0 pb-3 pe-4 d-block ps-5 ms-5 position-relative">
-                {" "}
-                <figure className="avatar position-absolute left-0 ms-2 mt-1">
-                    <img
-                    src="/assets/images/user-3.png"
-                    alt=""
-                    className="shadow-sm rounded-circle w35"
-                    />
-                </figure>
-                <div className="chat p-3 bg-greylight rounded-xxl d-block text-left theme-dark-bg">
-                    <h4 className="fw-700 text-grey-900 font-xssss mt-0 mb-1">
-                    David Goria{" "}
-                    <a href="#" className="ms-auto">
-                        <i className="ti-more-alt float-right text-grey-800 font-xsss" />
-                    </a>
-                    </h4>
-                    <p className="fw-500 text-grey-500 lh-20 font-xssss w-100 mt-2 mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </p>
-                </div>
-                </div>
-                <div className="card-body pt-0 pb-3 pe-4 d-block ps-5">
-                {" "}
-                <figure className="avatar position-absolute left-0 ms-2 mt-1">
-                    <img
-                    src="/assets/images/user-4.png"
-                    alt=""
-                    className="shadow-sm rounded-circle w35"
-                    />
-                </figure>
-                <div className="chat p-3 bg-greylight rounded-xxl d-block text-left theme-dark-bg">
-                    <h4 className="fw-700 text-grey-900 font-xssss mt-0 mb-1">
-                    Seary Victor{" "}
-                    <a href="#" className="ms-auto">
-                        <i className="ti-more-alt float-right text-grey-800 font-xsss" />
-                    </a>
-                    </h4>
-                    <p className="fw-500 text-grey-500 lh-20 font-xssss w-100 mt-2 mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla
-                    dolor.
-                    </p>
-                </div>
-                </div>
-                <div className="card-body pt-0 pb-3 pe-4 d-block ps-5">
-                {" "}
-                <figure className="avatar position-absolute left-0 ms-2 mt-1">
-                    <img
-                    src="/assets/images/user-4.png"
-                    alt=""
-                    className="shadow-sm rounded-circle w35"
-                    />
-                </figure>
-                <div className="chat p-3 bg-greylight rounded-xxl d-block text-left theme-dark-bg">
-                    <h4 className="fw-700 text-grey-900 font-xssss mt-0 mb-1">
-                    Ana Seary{" "}
-                    <a href="#" className="ms-auto">
-                        <i className="ti-more-alt float-right text-grey-800 font-xsss" />
-                    </a>
-                    </h4>
-                    <p className="fw-500 text-grey-500 lh-20 font-xssss w-100 mt-2 mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla
-                    dolor.
-                    </p>
-                </div>
-                </div>
-                <div className="card-body pt-0 pb-3 pe-4 d-block ps-5">
-                {" "}
-                <figure className="avatar position-absolute left-0 ms-2 mt-1">
-                    <img
-                    src="/assets/images/user-4.png"
-                    alt=""
-                    className="shadow-sm rounded-circle w35"
-                    />
-                </figure>
-                <div className="chat p-3 bg-greylight rounded-xxl d-block text-left theme-dark-bg">
-                    <h4 className="fw-700 text-grey-900 font-xssss mt-0 mb-1">
-                    Studio Express{" "}
-                    <a href="#" className="ms-auto">
-                        <i className="ti-more-alt float-right text-grey-800 font-xsss" />
-                    </a>
-                    </h4>
-                    <p className="fw-500 text-grey-500 lh-20 font-xssss w-100 mt-2 mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla
-                    dolor.
-                    </p>
-                </div>{" "}
-                </div>
+                {commentList.map((item, index)=>{
+                    return <CommentCard key={index} comment={item} />
+                })}
+              
             </div>
         </div>
         </>
