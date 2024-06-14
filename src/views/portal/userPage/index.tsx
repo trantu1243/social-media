@@ -15,6 +15,21 @@ interface FriendRequest {
     confirm: boolean
 }
 
+export async function confirmRequest(id: Number | undefined, token: string) {
+    const response = await fetch(`${SERVER_URL}/confirm-request/${id}`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': `${SERVER_URL}`,
+            'Authorization': token         
+        }
+    });
+    if (response.ok){
+        const res = await response.json();
+        return res
+    }
+}
+
 function UserPage(){
     const [user, setUser] = useState<User>();
     const id = useParams().id;
@@ -137,9 +152,22 @@ function UserPage(){
                 const res = await response.json();
                 console.log(res);
                 checkAddFriend();
+                getUserInfo();
             }
         }
         catch(e) {
+            console.log(e);
+        }
+    }
+
+    async function handleConfirm(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+        event.preventDefault();
+        try{
+            await confirmRequest(user?.id, token);
+            checkAddFriend();
+            getUserInfo();
+        }
+        catch(e){
             console.log(e);
         }
     }
@@ -197,7 +225,7 @@ function UserPage(){
                                                 <a
                                                     href="#"
                                                     className="d-none d-lg-block bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3"
-                                                    onClick={(e)=>{e.preventDefault()}}
+                                                    onClick={handleConfirm}
                                                 >
                                                 Confirm request
                                                 </a>
@@ -257,98 +285,98 @@ function UserPage(){
                                 </div>
                                 <div className="col-xl-4 col-xxl-3 col-lg-4 pe-0">
                                 
-                                <div className="card w-100 shadow-xss rounded-xxl border-0 mb-3 mt-3">
-                                    <div className="card-body d-block p-4">
-                                        <h4 className="fw-700 mb-3 font-xsss text-grey-900">About</h4>
-                                        <p className="fw-500 text-grey-500 lh-24 font-xssss mb-0">
-                                            {user?.about}
-                                        </p>
-                                    </div>
-                                    <div className="card-body border-top-xs d-flex">
-                                        <i className="feather-rss text-grey-500 me-3 font-lg" />
-                                        <h4 className="fw-700 text-grey-900 font-xssss mt-2">
-                                            {user?.followerid ? user?.followerid.length + " followers " : "0 follower"}
-                                        </h4>
-                                    </div>
-                                    <div className="card-body d-flex">
-                                        <i className="feather-rss text-grey-500 me-3 font-lg" />
-                                        <h4 className="fw-700 text-grey-900 font-xssss mt-2">
-                                            {user?.followingid ? user?.followingid.length + " following " : "0 following"}
-                                        </h4>
-                                    </div>
-                                </div>
-                                <div className="card w-100 shadow-xss rounded-xxl border-0 mb-3">
-                                    <div className="card-body d-flex align-items-center  p-4">
-                                    <h4 className="fw-700 mb-0 font-xssss text-grey-900">Photos</h4>
-                                        <a href="#" className="fw-600 ms-auto font-xssss text-primary">
-                                            See all
-                                        </a>
-                                    </div>
-                                    <div className="card-body d-block pt-0 pb-2">
-                                    <div className="row">
-                                        <div className="col-6 mb-2 pe-1">
-                                        <a href="/assets/images/e-2.jpg" data-lightbox="roadtrip">
-                                            <img
-                                            src="/assets/images/e-2.jpg"
-                                            alt=""
-                                            className="img-fluid rounded-3 w-100"
-                                            />
-                                        </a>
+                                    <div className="card w-100 shadow-xss rounded-xxl border-0 mb-3 mt-3">
+                                        <div className="card-body d-block p-4">
+                                            <h4 className="fw-700 mb-3 font-xsss text-grey-900">About</h4>
+                                            <p className="fw-500 text-grey-500 lh-24 font-xssss mb-0">
+                                                {user?.about}
+                                            </p>
                                         </div>
-                                        <div className="col-6 mb-2 ps-1">
-                                        <a href="/assets/images/e-3.jpg" data-lightbox="roadtrip">
-                                            <img
-                                            src="/assets/images/e-3.jpg"
-                                            alt=""
-                                            className="img-fluid rounded-3 w-100"
-                                            />
-                                        </a>
+                                        <div className="card-body border-top-xs d-flex">
+                                            <i className="feather-rss text-grey-500 me-3 font-lg" />
+                                            <h4 className="fw-700 text-grey-900 font-xssss mt-2">
+                                                {user?.followerid ? user?.followerid.length + " followers " : "0 follower"}
+                                            </h4>
                                         </div>
-                                        <div className="col-6 mb-2 pe-1">
-                                        <a href="/assets/images/e-4.jpg" data-lightbox="roadtrip">
-                                            <img
-                                            src="/assets/images/e-4.jpg"
-                                            alt=""
-                                            className="img-fluid rounded-3 w-100"
-                                            />
-                                        </a>
-                                        </div>
-                                        <div className="col-6 mb-2 ps-1">
-                                        <a href="/assets/images/e-5.jpg" data-lightbox="roadtrip">
-                                            <img
-                                            src="/assets/images/e-5.jpg"
-                                            alt=""
-                                            className="img-fluid rounded-3 w-100"
-                                            />
-                                        </a>
-                                        </div>
-                                        <div className="col-6 mb-2 pe-1">
-                                        <a href="/assets/images/e-2.jpg" data-lightbox="roadtrip">
-                                            <img
-                                            src="/assets/images/e-2.jpg"
-                                            alt=""
-                                            className="img-fluid rounded-3 w-100"
-                                            />
-                                        </a>
-                                        </div>
-                                        <div className="col-6 mb-2 ps-1">
-                                        <a href="/assets/images/e-1.jpg" data-lightbox="roadtrip">
-                                            <img
-                                            src="/assets/images/e-1.jpg"
-                                            alt=""
-                                            className="img-fluid rounded-3 w-100"
-                                            />
-                                        </a>
+                                        <div className="card-body d-flex">
+                                            <i className="feather-rss text-grey-500 me-3 font-lg" />
+                                            <h4 className="fw-700 text-grey-900 font-xssss mt-2">
+                                                {user?.followingid ? user?.followingid.length + " following " : "0 following"}
+                                            </h4>
                                         </div>
                                     </div>
+                                    <div className="card w-100 shadow-xss rounded-xxl border-0 mb-3">
+                                        <div className="card-body d-flex align-items-center  p-4">
+                                            <h4 className="fw-700 mb-0 font-xssss text-grey-900">Photos</h4>
+                                            <a href="#" className="fw-600 ms-auto font-xssss text-primary">
+                                                See all
+                                            </a>
+                                        </div>
+                                        <div className="card-body d-block pt-0 pb-2">
+                                        <div className="row">
+                                            <div className="col-6 mb-2 pe-1">
+                                                <a href="/assets/images/e-2.jpg" data-lightbox="roadtrip">
+                                                    <img
+                                                    src="/assets/images/e-2.jpg"
+                                                    alt=""
+                                                    className="img-fluid rounded-3 w-100"
+                                                    />
+                                                </a>
+                                            </div>
+                                            <div className="col-6 mb-2 ps-1">
+                                                <a href="/assets/images/e-3.jpg" data-lightbox="roadtrip">
+                                                    <img
+                                                    src="/assets/images/e-3.jpg"
+                                                    alt=""
+                                                    className="img-fluid rounded-3 w-100"
+                                                    />
+                                                </a>
+                                            </div>
+                                            <div className="col-6 mb-2 pe-1">
+                                                <a href="/assets/images/e-4.jpg" data-lightbox="roadtrip">
+                                                    <img
+                                                    src="/assets/images/e-4.jpg"
+                                                    alt=""
+                                                    className="img-fluid rounded-3 w-100"
+                                                    />
+                                                </a>
+                                            </div>
+                                            <div className="col-6 mb-2 ps-1">
+                                                <a href="/assets/images/e-5.jpg" data-lightbox="roadtrip">
+                                                    <img
+                                                    src="/assets/images/e-5.jpg"
+                                                    alt=""
+                                                    className="img-fluid rounded-3 w-100"
+                                                    />
+                                                </a>
+                                            </div>
+                                            <div className="col-6 mb-2 pe-1">
+                                                <a href="/assets/images/e-2.jpg" data-lightbox="roadtrip">
+                                                    <img
+                                                    src="/assets/images/e-2.jpg"
+                                                    alt=""
+                                                    className="img-fluid rounded-3 w-100"
+                                                    />
+                                                </a>
+                                            </div>
+                                            <div className="col-6 mb-2 ps-1">
+                                                <a href="/assets/images/e-1.jpg" data-lightbox="roadtrip">
+                                                    <img
+                                                    src="/assets/images/e-1.jpg"
+                                                    alt=""
+                                                    className="img-fluid rounded-3 w-100"
+                                                    />
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="card-body d-block w-100 pt-0">
-                                    <a
-                                        href="#"
-                                        className="p-2 lh-28 w-100 d-block bg-grey text-grey-800 text-center font-xssss fw-700 rounded-xl"
-                                    >
-                                        <i className="feather-external-link font-xss me-2" /> More
-                                    </a>
+                                        <a
+                                            href="#"
+                                            className="p-2 lh-28 w-100 d-block bg-grey text-grey-800 text-center font-xssss fw-700 rounded-xl"
+                                        >
+                                            <i className="feather-external-link font-xss me-2" /> More
+                                        </a>
                                     </div>
                                 </div>
                                 
