@@ -41,9 +41,11 @@ function Login(){
                 body: JSON.stringify(inputText)
             });
             const res = await response.json();
-            localStorage.setItem("token", res.token);
-            dispatch(login(res));
-            navigate('/portal/home');
+            if (res.status === "success"){
+                localStorage.setItem("token", res.user.token);
+                dispatch(login(res.user));
+                navigate('/portal/home');
+            }
         }
         catch (e) {
             console.log(e);

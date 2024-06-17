@@ -1,11 +1,42 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 
+import { useCallback, useEffect, useState } from "react";
 import InputCard from "../../../components/inputCard";
 import PostCard from "../../../components/postCard";
 import Rightbar from "../../../components/rightbar";
+import SERVER_URL from "../../../variables";
+import { useAppSelector } from "../../../hooks";
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
 function Home(){
+
+    const [postidList, setPostidList] = useState<Number[]>([]);
+    const token = useAppSelector((state)=>state.auth.data.token);
+
+    const getPostIds = useCallback(async()=>{
+        try{
+            const response = await fetch(`${SERVER_URL}/posts/following`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': `${SERVER_URL}`,
+                    'Authorization': token         
+                }
+            });
+            if (response.ok){
+                const res = await response.json();
+                console.log(res);
+                setPostidList(res);
+            }
+        }
+        catch(e){
+            console.log(e);
+        }
+    }, [token]);
+
+    useEffect(()=>{
+        getPostIds();
+    }, [getPostIds]);
+
     return (
         <>
         <div className="main-content right-chat-active">
@@ -215,7 +246,9 @@ function Home(){
                         </div>
 
                         <InputCard />
-                        {/* <PostCard /> */}
+                        {postidList.map((item, index)=>{
+                            return <PostCard key={index} post_id={item.toString()} />
+                        })}
 
                         <div className="card w-100 text-center shadow-xss rounded-xxl border-0 p-4 mb-3 mt-3">
                             <div

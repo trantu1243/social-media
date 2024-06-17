@@ -1,8 +1,61 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks";
+import { useCallback, useEffect, useState } from "react";
+import SERVER_URL from "../../variables";
+
+interface SearchUser {
+    id: Number;
+    name: string,
+    about: string,
+    avatar: string,
+    followerid: string[]
+}
 
 function Navbar(){
     const user = useAppSelector((state) => state.auth).data.user;
+    const token = useAppSelector((state) => state.auth).data.token;
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [path, setPath] = useState<Number>(0);
+    useEffect(()=>{
+        if (location.pathname === "/portalhome") setPath(0);
+        else if (location.pathname === "/portal/secret") setPath(1);
+    },[location]);
+
+    const [searchInput, setSearchInput] =  useState<string>("");
+    const [userList, setUserList] = useState<SearchUser[]>([]);
+    const [serachPopup, setSearchPopup] = useState<boolean>(false);
+    const handleSearch = useCallback(async ()=>{
+        try{
+            const response = await fetch(`${SERVER_URL}/search/user`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': `${SERVER_URL}`,
+                    'Authorization': token         
+                },
+                body: JSON.stringify({search_name: searchInput})
+            });
+            if (response.ok){
+                const res = await response.json();
+                console.log(res);
+                setUserList(res);
+            }
+        }
+        catch(e){
+            console.log(e);
+        }
+    }, [token, searchInput]);
+
+    useEffect(()=>{
+        if (searchInput !== "") {
+            handleSearch();
+            setSearchPopup(true);
+        }
+        else setSearchPopup(false);
+    },[searchInput, handleSearch]);
+
     return (
         <>
         <div className="nav-header bg-white shadow-xs border-0">
@@ -31,20 +84,59 @@ function Navbar(){
                         type="text"
                         placeholder="Start typing to search.."
                         className="bg-grey border-0 lh-32 pt-2 pb-2 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg"
+                        name="search"
+                        value={searchInput}
+                        onChange={(e)=>{setSearchInput(e.target.value)}}
                     />
                     </div>
                 </form>
+                {serachPopup && <div
+                className="dropdown-menu dropdown-menu-end p-4 rounded-3 border-0 shadow-lg show"
+                style={{
+                    position: "absolute",
+                    inset: "0px auto auto 0px",
+                    margin: 0,
+                    width: "300px",
+                    transform: "translate(310px, 75.4286px)"
+                }}
+                >
+                    {userList.map((item, index)=>{
+                        return <div key={index} className="card bg-transparent-card w-100 border-0 ps-5 mb-3 pointer-class"
+                                onClick={()=>{navigate(`/portal/user/${item.id}`); setSearchInput("")}}
+                            >
+                                <img
+                                src={item.avatar}
+                                alt="user"
+                                className="w40 position-absolute left-0"
+                                style={{borderRadius: "50%"}}
+                                />
+                                <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">
+                                {item.name}
+                            
+                                </h5>
+                                <h6 className="text-grey-500 fw-500 font-xssss lh-4">
+                                    {item.followerid.length + " followers"}
+                                </h6>
+                            </div>
+                    })}
+                    {userList.length === 0 &&
+                        <h6 className="text-grey-500 fw-500 font-xssss lh-4">
+                            No result
+                        </h6>
+                }
+                </div>}
+
                 <a
                     href="/portal/home"
                     className="p-2 text-center ms-3 menu-icon center-menu-icon"
                 >
-                    <i className="feather-home font-lg alert-primary btn-round-lg theme-dark-bg text-current " />
+                    <i className={"feather-home " + (path === 0? "font-lg alert-primary btn-round-lg theme-dark-bg text-current ":"font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500")}/>
                 </a>
                 <a
-                    href="default-storie.html"
+                    href="/portal/secret"
                     className="p-2 text-center ms-0 menu-icon center-menu-icon"
                 >
-                    <i className="feather-lock font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500 " />
+                    <i className={"feather-lock " + (path === 1 ? "font-lg alert-primary btn-round-lg theme-dark-bg text-current ":"font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500")}/>
                 </a>
 
                 <a
@@ -148,7 +240,9 @@ function Navbar(){
                 <a href="#" className="p-2 text-center ms-3 menu-icon chat-active-btn">
                     <i className="feather-message-square font-xl text-current" />
                 </a>
-                <div className="p-2 text-center ms-3 position-relative dropdown-menu-icon menu-icon cursor-pointer">
+                <div className="p-2 text-center ms-3 position-relative dropdown-menu-icon menu-icon cursor-pointer"
+                    onClick={()=>{navigate("/portal/setting")}}
+                >
                     <i className="feather-settings animation-spin d-inline-block font-xl text-current" />
                 </div>
                 <a href={`/portal/user/${user.id}`} className="p-0 ms-3 menu-icon" >

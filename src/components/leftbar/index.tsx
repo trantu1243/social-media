@@ -23,7 +23,7 @@ function Leftbar(){
                                 </a>
                             </li>
                             <li>
-                                <a href="default.html" className="nav-content-bttn open-font">
+                                <a href="/portal/secret" className="nav-content-bttn open-font">
                                 <i className="feather-lock btn-round-md bg-gold-gradiant me-3" />
                                 <span>Secret</span>
                                 </a>
@@ -52,14 +52,14 @@ function Leftbar(){
                         <ul className="mb-1">
                             <li className="logo d-none d-xl-block d-lg-block" />
                             <li>
-                                <a href="user-page.html" className="nav-content-bttn open-font">
+                                <a href="/portal/setting" className="nav-content-bttn open-font">
                                 <i className="feather-settings btn-round-md bg-mini-gradiant me-3" />
                                 <span>Settings</span>
                                 </a>
                             </li>
 
                             <li>
-                                <a href="user-page.html" className="nav-content-bttn open-font">
+                                <a href="" className="nav-content-bttn open-font">
                                 <i className="feather-message-square btn-round-md bg-primary me-3" />
                                 <span>Chat</span>
                                 <span className="circle-count bg-warning mt-0">23</span>

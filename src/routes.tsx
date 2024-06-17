@@ -9,6 +9,9 @@ import Home from "./views/portal/home";
 import UserPage from "./views/portal/userPage";
 import ErrorPage from "./error-page";
 import PostPage from "./views/portal/postPage";
+import Secret from "./views/portal/secret";
+import Setting from "./views/portal/setting";
+import UserInformation from "./views/portal/setting/account-information";
 
 const routes = [
     {
@@ -43,12 +46,24 @@ const routes = [
           element: <Home />
         },
         {
+          path: "secret",
+          element: <Secret />
+        },
+        {
           path: "user/:id",
           element: <UserPage />,
         },
         {
           path: "post/:id",
           element: <PostPage />,
+        },
+        {
+          path: "setting",
+          element: <Setting />
+        },
+        {
+          path: "setting/user-information",
+          element: <UserInformation />
         },
         {
           path: "/portal",
