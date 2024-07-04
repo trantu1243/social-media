@@ -31,7 +31,7 @@ function Setting(){
                             </li>
                             <li className="list-inline-item d-block  me-0">
                                 <a
-                                href="password.html"
+                                href="/portal/setting/change-password"
                                 className="pt-2 pb-2 d-flex align-items-center"
                                 >
                                 <i className="btn-round-md bg-blue-gradiant text-white feather-inbox font-md me-3" />{" "}

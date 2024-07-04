@@ -12,6 +12,7 @@ import PostPage from "./views/portal/postPage";
 import Secret from "./views/portal/secret";
 import Setting from "./views/portal/setting";
 import UserInformation from "./views/portal/setting/account-information";
+import ChangePassword from "./views/portal/setting/changePassword";
 
 const routes = [
     {
@@ -64,6 +65,10 @@ const routes = [
         {
           path: "setting/user-information",
           element: <UserInformation />
+        },
+        {
+          path: "setting/change-password",
+          element: <ChangePassword />
         },
         {
           path: "/portal",

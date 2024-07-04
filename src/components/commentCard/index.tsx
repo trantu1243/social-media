@@ -15,6 +15,7 @@ const CommentCard : React.FC<CommentCardProps> = ({ comment }) => {
                 src={comment.avatar_user}
                 alt=""
                 className="shadow-sm rounded-circle w35"
+                style={{borderRadius: "50%", height: "30px", objectFit:"cover"}}
                 />
             </figure>
             <div className="chat p-3 bg-greylight rounded-xxl d-block text-left theme-dark-bg">

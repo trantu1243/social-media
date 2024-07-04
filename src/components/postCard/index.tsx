@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SERVER_URL from "../../variables";
 import { useAppSelector } from "../../hooks";
+import { timeAgo } from "../navbar";
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
 export interface PostCardProps {
@@ -130,7 +131,7 @@ const PostCard: React.FC<PostCardProps> = ({ post_id }) =>{
                 <h4 className="fw-700 text-grey-900 font-xssss mt-1 pointer-class" onClick={(e)=>{e.stopPropagation();navigate(`/portal/user/${post.userid}`)}}>
                     {post.name}{" "}
                     <span className="d-block font-xssss fw-500 mt-1 lh-3 text-grey-500">
-                    2 hour ago
+                    {timeAgo(post.interact_date)}
                     </span>
                 </h4>
                 <a href="#" className="ms-auto" onClick={handlePopup}>
@@ -158,7 +159,7 @@ const PostCard: React.FC<PostCardProps> = ({ post_id }) =>{
             <div className="card-body p-0 me-lg-5">
             <p className="fw-500 text-grey-500 lh-26 font-xssss w-100">
                 {checkContent ? post.content : post.content.substring(0, 50)}{" "}
-                {!checkContent && <a href="#" className="fw-600 text-primary ms-2" onClick={(e)=>{}}>
+                {!checkContent && <a href="#" className="fw-600 text-primary ms-2" onClick={handleMore}>
                 See more
                 </a>}
             </p>

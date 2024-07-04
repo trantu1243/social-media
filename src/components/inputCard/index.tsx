@@ -86,6 +86,7 @@ function InputCard(){
                     src={user.avatar}
                     alt=""
                     className="shadow-sm rounded-circle w30"
+                    style={{borderRadius: "50%", height: "30px", objectFit:"cover"}}
                     />
                 </figure>
                 <textarea

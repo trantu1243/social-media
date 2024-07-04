@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import { useCallback, useEffect, useState } from "react";
-import { Post, PostCardProps } from "../postCard";
+import { PostCardProps } from "../postCard";
 import SERVER_URL from "../../variables";
 import { useAppSelector } from "../../hooks";
 import CommentCard from "../commentCard";
@@ -65,6 +65,7 @@ const RightComment: React.FC<PostCardProps> = ({ post_id }) =>{
                     const res = await response.json();
                     console.log(res);
                     getPost();
+                    setYourPost("");
                 }
             }
             catch (e){
@@ -82,6 +83,7 @@ const RightComment: React.FC<PostCardProps> = ({ post_id }) =>{
                     src={user.avatar}
                     alt=""
                     className="shadow-sm rounded-circle w30"
+                    style={{borderRadius: "50%", height: "30px", objectFit:"cover"}}
                     />
                 </figure>
                 <textarea
