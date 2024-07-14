@@ -17,7 +17,7 @@ This is a sample TypeScript application that demonstrates how to set up and use 
 
     ```bash
     git clone https://github.com/trantu1243/social-media.git
-    cd your-repo-name
+    cd social-media
     ```
 
 2. **Install dependencies:**
