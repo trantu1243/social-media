@@ -30,6 +30,22 @@ export async function confirmRequest(id: Number | undefined, token: string) {
     }
 }
 
+export async function deleteRequest(id: Number | undefined, token: string) {
+    const response = await fetch(`${SERVER_URL}/delete-friend/${id}`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': `${SERVER_URL}`,
+            'Authorization': token         
+        }
+    });
+    if (response.ok){
+        const res = await response.json();
+        console.log(res);
+        return res
+    }
+}
+
 function UserPage(){
     const [user, setUser] = useState<User>();
     const id = useParams().id;
@@ -82,6 +98,7 @@ function UserPage(){
         catch(e) {
             console.log(e);
             setFriendRequest(null);
+            setRequestStatus(0);
         }
     },[token, id]);
 
@@ -172,6 +189,21 @@ function UserPage(){
         }
     }
 
+    async function handleDelete(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+        event.preventDefault();
+        try{
+            await deleteRequest(user?.id, token);
+            setFriendRequest(null);
+            setRequestStatus(0);
+            setCheckPopup(false);
+            checkAddFriend();
+            getUserInfo();
+        }
+        catch(e){
+            console.log(e);
+        }
+    }
+
     return (
         <>
             <div className="main-content right-chat-active">
@@ -248,7 +280,7 @@ function UserPage(){
                                             >
                                                 <i className="ti-more font-md tetx-dark" />
                                             </a>
-                                            {checkPopup && id_user === user?.id && <div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg show" aria-labelledby="dropdownMenu2" data-popper-placement="bottom-end" style={{position: 'absolute', inset: 'auto auto auto auto', margin: '0px', transform: 'translate(0px, 100px)'}}>
+                                            {checkPopup && (id_user === user?.id ? <div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg show" aria-labelledby="dropdownMenu2" data-popper-placement="bottom-end" style={{position: 'absolute', inset: 'auto auto auto auto', margin: '0px', transform: 'translate(0px, 100px)'}}>
                                                 <label className="card-body p-0 d-flex" htmlFor="avatar">
                                                     <i className="feather-arrow-up text-grey-500 me-3 font-lg" />
                                                     <h4 className="fw-600 text-grey-900 font-xssss mt-1 me-4">Upload avatar</h4>
@@ -275,7 +307,18 @@ function UserPage(){
                                                         uploadImage(e, 'background');
                                                     }}
                                                 />
-                                            </div>}
+                                            </div>:(<div className="dropdown-menu dropdown-menu-end p-4 rounded-xxl border-0 shadow-lg show" aria-labelledby="dropdownMenu2" data-popper-placement="bottom-end" style={{position: 'absolute',minWidth:"150px", inset: 'auto auto auto auto', margin: '0px', transform: 'translate(0px, 100px)'}}>
+                                                {requestStatus !== 0 && <div className="card-body p-0 d-flex pointer-class" style={{marginBottom:"5px"}} onClick={handleDelete}>
+                                                    <i className="feather-user-x text-grey-500 me-3 font-lg" />
+                                                    <h4 className="fw-600 text-grey-900 font-xssss mt-1 me-4">Unfriend</h4>
+                                                </div>}
+                                        
+                                                <div className="card-body p-0 d-flex pointer-class">
+                                                    <i className="feather-slash text-grey-500 me-3 font-lg" />
+                                                    <h4 className="fw-600 text-grey-900 font-xssss mt-1 me-4">Block</h4>
+                                                </div>
+                                               
+                                            </div>))}
                                         </div>
                                     </div>
                                     <div className="card-body d-block w-100 shadow-none mb-0 p-0 border-top-xs">

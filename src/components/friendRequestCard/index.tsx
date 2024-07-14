@@ -3,8 +3,9 @@
 
 import { useState } from "react";
 import { useAppSelector } from "../../hooks";
-import { confirmRequest } from "../../views/portal/userPage";
+import { confirmRequest, deleteRequest } from "../../views/portal/userPage";
 import { SearchUser } from "../navbar";
+import { useNavigate } from "react-router-dom";
 
 interface FriendRequestProps {
     user: SearchUser
@@ -14,11 +15,23 @@ const FriendRequestCard : React.FC<FriendRequestProps> = ({ user }) =>{
 
     const token = useAppSelector((state) => state.auth).data.token;
     const [confirm, setConfirm] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     async function handleConfirm(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
         event.preventDefault();
         try{
             await confirmRequest(user.id, token);
+            setConfirm(true);
+        }
+        catch(e){
+            console.log(e);
+        }
+    }
+
+    async function handleDelete(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+        event.preventDefault();
+        try{
+            await deleteRequest(user.id, token);
             setConfirm(true);
         }
         catch(e){
@@ -34,6 +47,7 @@ const FriendRequestCard : React.FC<FriendRequestProps> = ({ user }) =>{
                 alt=""
                 className="shadow-sm rounded-circle w45"
                 style={{height: "45px" ,objectFit:"cover"}}
+                onClick={()=>{navigate(`/portal/user/${user.id}`)}}
                 />
             </figure>
             <h4 className="fw-700 text-grey-900 font-xssss mt-1">
@@ -58,6 +72,7 @@ const FriendRequestCard : React.FC<FriendRequestProps> = ({ user }) =>{
             <a
                 href="#"
                 className="p-2 lh-20 w100 bg-grey text-grey-800 text-center font-xssss fw-600 ls-1 rounded-xl"
+                onClick={handleDelete}
             >
                 Delete
             </a>

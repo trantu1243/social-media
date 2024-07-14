@@ -39,10 +39,10 @@ function PostPage(){
       
                         <div className="row feed-body"> 
                             <div className="col-xl-8 col-xxl-9 col-lg-8">
-                                {typeof(id) ==="string" && <PostCard post_id = {id}/>}
+                                {typeof(id) ==="string" && <PostCard post_id = {String(id)}/>}
                             </div>
                             <div className="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
-                                {typeof(id) ==="string" && <RightComment post_id = {id}/>}
+                                {typeof(id) ==="string" && <RightComment post_id = {String(id)}/>}
                             </div>
                         </div>                  
                     </div>

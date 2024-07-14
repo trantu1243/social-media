@@ -6,7 +6,7 @@ import { timeAgo } from "../navbar";
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
 export interface PostCardProps {
-    post_id: string;
+    post_id: String;
 }
 
 export interface Post {

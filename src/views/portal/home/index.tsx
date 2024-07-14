@@ -11,6 +11,8 @@ import { useAppSelector } from "../../../hooks";
 function Home(){
 
     const [postidList, setPostidList] = useState<Number[]>([]);
+    const [idList, setIdList] = useState<Number[]>([]);
+    const [index, setIndex] = useState<number>(0);
     const token = useAppSelector((state)=>state.auth.data.token);
 
     const getPostIds = useCallback(async()=>{
@@ -36,6 +38,27 @@ function Home(){
     useEffect(()=>{
         getPostIds();
     }, [getPostIds]);
+
+    const handleScroll = useCallback(() => {
+        if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight) {
+            setIndex(preVal => preVal + 1);
+            window.removeEventListener('scroll', handleScroll);
+        }
+    },[]);
+
+    useEffect(()=>{
+        if (index <= Math.floor(postidList.length / 5)){
+            if (index === Math.floor(postidList.length / 5)) setIdList(postidList);
+            else {
+                let nums: Number[] = [];
+                for (let i=0; i<(index+1)*5; i++){
+                    nums.push(postidList[i]);
+                }       
+                setIdList(nums);
+            }
+            window.addEventListener("scroll", handleScroll);
+        }
+    }, [index, postidList, handleScroll])
 
     return (
         <>
@@ -246,8 +269,8 @@ function Home(){
                         </div>
 
                         <InputCard />
-                        {postidList.map((item, index)=>{
-                            return <PostCard key={index} post_id={item.toString()} />
+                        {idList.map((item, index)=>{
+                            return <PostCard key={index} post_id={String(item)} />
                         })}
 
                         <div className="card w-100 text-center shadow-xss rounded-xxl border-0 p-4 mb-3 mt-3">

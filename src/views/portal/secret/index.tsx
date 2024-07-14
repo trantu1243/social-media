@@ -76,7 +76,7 @@ function Secret(){
                         
                             <SecretInputCard />
                             {postidList.map((item, index)=>{
-                                return <PostCard key={index} post_id={item.toString()} />
+                                return <PostCard key={index} post_id={String(item)} />
                             })}
 
                         <div className="card w-100 text-center shadow-xss rounded-xxl border-0 p-4 mb-3 mt-3">
